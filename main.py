@@ -1,1 +1,3 @@
-print("Huawei Discovery V1")
+from discover import discover
+
+discover()
