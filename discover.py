@@ -2,14 +2,14 @@ from config import SWITCHES
 from oids import *
 from snmp import *
 
-
 def discover():
-
-    print("Huawei Discovery")
 
     for sw in SWITCHES:
 
-        print(sw["name"])
+        print("=" * 60)
+        print("Switch :", sw["name"])
+        print("IP     :", sw["ip"])
+        print("=" * 60)
 
         ports = snmp_walk(
             sw["ip"],
@@ -17,4 +17,10 @@ def discover():
             IFNAME
         )
 
-        print(ports)
+        for oid, value in ports:
+
+            if "XGigabitEthernet" in value:
+
+                ifindex = oid.split(".")[-1]
+
+                print(f"{value:30} ifIndex={ifindex}")
