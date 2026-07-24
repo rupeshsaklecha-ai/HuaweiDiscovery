@@ -1,15 +1,12 @@
 from config import SWITCHES
-from oids import *
 from snmp import *
+from oids import IFNAME
 
 def discover():
 
     for sw in SWITCHES:
 
-        print("=" * 60)
-        print("Switch :", sw["name"])
-        print("IP     :", sw["ip"])
-        print("=" * 60)
+        print(f"\nConnecting : {sw['ip']}")
 
         ports = snmp_walk(
             sw["ip"],
@@ -17,10 +14,7 @@ def discover():
             IFNAME
         )
 
-        for oid, value in ports:
-
-            if "XGigabitEthernet" in value:
-
-                ifindex = oid.split(".")[-1]
-
-                print(f"{value:30} ifIndex={ifindex}")
+        if len(ports) == 0:
+            print("SNMP Failed")
+        else:
+            print(f"SNMP OK ({len(ports)} interfaces found)")
