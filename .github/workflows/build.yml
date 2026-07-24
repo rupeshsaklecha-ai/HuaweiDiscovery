@@ -1,0 +1,35 @@
+name: Build HuaweiDiscovery
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build EXE
+        run: |
+          pip install pyinstaller
+          pyinstaller --onefile main.py --name HuaweiDiscovery
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: HuaweiDiscovery
+          path: dist/HuaweiDiscovery.exe
