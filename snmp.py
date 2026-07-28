@@ -1,55 +1,98 @@
 from pysnmp.hlapi import *
 
+
 def snmp_get(ip, community, oid):
 
     iterator = getCmd(
+
         SnmpEngine(),
+
         CommunityData(community),
+
         UdpTransportTarget((ip,161), timeout=2, retries=1),
+
         ContextData(),
+
         ObjectType(ObjectIdentity(oid))
+
     )
 
-    errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
+    errorIndication,errorStatus,errorIndex,varBinds=next(iterator)
 
     if errorIndication:
-        print(errorIndication)
+
         return None
 
     if errorStatus:
-        print(errorStatus.prettyPrint())
+
         return None
 
-    for name, value in varBinds:
-        return str(value)
+    for varBind in varBinds:
 
-    return None
+        return str(varBind[1])
+
 
 
 def snmp_walk(ip, community, oid):
 
     result=[]
 
-    iterator = nextCmd(
-        SnmpEngine(),
-        CommunityData(community),
-        UdpTransportTarget((ip,161), timeout=2, retries=1),
-        ContextData(),
-        ObjectType(ObjectIdentity(oid)),
-        lexicographicMode=False
-    )
+    for (errorIndication,
+         errorStatus,
+         errorIndex,
+         varBinds) in nextCmd(
 
-    for errorIndication,errorStatus,errorIndex,varBinds in iterator:
+            SnmpEngine(),
+
+            CommunityData(community),
+
+            UdpTransportTarget((ip,161), timeout=2, retries=1),
+
+            ContextData(),
+
+            ObjectType(ObjectIdentity(oid)),
+
+            lexicographicMode=False):
 
         if errorIndication:
-            print(errorIndication)
+
             break
 
         if errorStatus:
-            print(errorStatus.prettyPrint())
+
             break
 
-        for name,value in varBinds:
-            result.append((str(name),str(value)))
+        for varBind in varBinds:
+
+            result.append(
+
+                (
+
+                    str(varBind[0]),
+
+                    str(varBind[1])
+
+                )
+
+            )
 
     return result
+
+
+def snmp_test(ip, community):
+
+    value = snmp_get(
+
+        ip,
+
+        community,
+
+        "1.3.6.1.2.1.1.5.0"
+
+    )
+
+    if value is None:
+
+        return False
+
+    return True
