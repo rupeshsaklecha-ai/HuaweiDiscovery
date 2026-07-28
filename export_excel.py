@@ -21,17 +21,29 @@ def export_excel(ip, excel_data):
     # ===== Switch Info =====
     ws["A4"] = "Switch IP"
     ws["B4"] = ip
+    
+    ws["A5"] = "Model"
+    ws["B5"] = model
+
+    ws["A6"] = "Serial Number"
+    ws["B6"] = serial
+
+    ws["A7"] = "Software Version"
+    ws["B7"] = software
+
+    ws["A8"] = "Hardware Version"
+    ws["B8"] = hardware
 
     # ===== Table Header =====
-    ws["A6"] = "Port Name"
-    ws["B6"] = "ifIndex"
-    ws["C6"] = "entPhysicalIndex"
+    ws["A10"] = "Port Name"
+    ws["B10"] = "ifIndex"
+    ws["C10"] = "entPhysicalIndex"
 
-    for cell in ["A6", "B6", "C6"]:
+    for cell in ["A10", "B10", "C10"]:
         ws[cell].font = Font(bold=True)
 
     # ===== Data =====
-    row = 7
+    row = 11
 
     for data in excel_data:
         ws.cell(row=row, column=1).value = data[0]
