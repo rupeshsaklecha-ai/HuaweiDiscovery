@@ -1,5 +1,5 @@
-from discover import discover
 
+from discover import discover
 print("=" * 60)
 print("Huawei Discovery Tool V2.0")
 print("Developed by Sun Technologies")
