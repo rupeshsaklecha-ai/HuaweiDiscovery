@@ -1,7 +1,12 @@
 from snmp import snmp_walk
 from export_excel import export_excel
 from oids import IFNAME, ENT_ALIAS
+from oids import HW_MODEL, HW_SERIAL, HW_SOFTWARE, HW_HARDWARE
 
+model = snmp_get(ip, community, port, HW_MODEL)
+serial = snmp_get(ip, community, port, HW_SERIAL)
+software = snmp_get(ip, community, port, HW_SOFTWARE)
+hardware = snmp_get(ip, community, port, HW_HARDWARE)
 
 def get_ent_mapping(ip, community, port):
 
