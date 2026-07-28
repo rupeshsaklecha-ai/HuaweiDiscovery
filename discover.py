@@ -11,6 +11,16 @@ def get_ent_mapping(sw):
         ENT_ALIAS
     )
 
+print("\nENT_ALIAS WALK")
+    print("-" * 60)
+
+    for oid, value in rows:
+        print("OID  :", oid)
+        print("VALUE:", value)
+        print()
+
+    return {}
+    
     mapping = {}
 
     for oid, value in rows:
