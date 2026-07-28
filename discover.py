@@ -56,3 +56,11 @@ def get_ent_mapping(sw):
             mapping[ifindex] = ent
 
     return mapping
+
+mapping = get_ent_mapping(sw)
+
+print("\nEntity Mapping")
+print("-" * 40)
+
+for ifindex in sorted(mapping):
+    print(f"ifIndex {ifindex} -> entPhysicalIndex {mapping[ifindex]}")
