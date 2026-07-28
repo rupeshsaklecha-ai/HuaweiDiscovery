@@ -26,7 +26,7 @@ jobs:
         run: |
           pyinstaller --onefile main.py --name HuaweiDiscovery
 
-      - name: Upload EXE
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: HuaweiDiscovery
