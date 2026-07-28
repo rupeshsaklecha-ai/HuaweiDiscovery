@@ -61,7 +61,7 @@ def discover():
 
         for oid, value in ports:
 
-            if "XGigabitEthernet" in value:
+            "if "XGigabitEthernet" in value:"
 
                 ifindex = int(oid.split(".")[-1])
 
