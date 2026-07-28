@@ -1,7 +1,11 @@
 from pysnmp.hlapi import *
 
 
-def snmp_get(ip, community, oid):
+# -------------------------------------------------------
+# SNMP GET
+# -------------------------------------------------------
+
+def snmp_get(ip, community, port, oid):
 
     iterator = getCmd(
 
@@ -9,7 +13,7 @@ def snmp_get(ip, community, oid):
 
         CommunityData(community),
 
-        UdpTransportTarget((ip,161), timeout=2, retries=1),
+        UdpTransportTarget((ip, port), timeout=2, retries=1),
 
         ContextData(),
 
@@ -17,49 +21,53 @@ def snmp_get(ip, community, oid):
 
     )
 
-    errorIndication,errorStatus,errorIndex,varBinds=next(iterator)
+    errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
 
     if errorIndication:
-
         return None
 
     if errorStatus:
-
         return None
 
     for varBind in varBinds:
-
         return str(varBind[1])
 
 
+# -------------------------------------------------------
+# SNMP WALK
+# -------------------------------------------------------
 
-def snmp_walk(ip, community, oid):
+def snmp_walk(ip, community, port, oid):
 
-    result=[]
+    result = []
 
-    for (errorIndication,
-         errorStatus,
-         errorIndex,
-         varBinds) in nextCmd(
+    for (
+        errorIndication,
+        errorStatus,
+        errorIndex,
+        varBinds
+    ) in nextCmd(
 
-            SnmpEngine(),
+        SnmpEngine(),
 
-            CommunityData(community),
+        CommunityData(community),
 
-            UdpTransportTarget((ip,161), timeout=2, retries=1),
+        UdpTransportTarget((ip, port), timeout=2, retries=1),
 
-            ContextData(),
+        ContextData(),
 
-            ObjectType(ObjectIdentity(oid)),
+        ObjectType(ObjectIdentity(oid)),
 
-            lexicographicMode=False):
+        lexicographicMode=False
+
+    ):
 
         if errorIndication:
-
+            print("SNMP Error :", errorIndication)
             break
 
         if errorStatus:
-
+            print("SNMP Error :", errorStatus.prettyPrint())
             break
 
         for varBind in varBinds:
@@ -79,7 +87,11 @@ def snmp_walk(ip, community, oid):
     return result
 
 
-def snmp_test(ip, community):
+# -------------------------------------------------------
+# TEST CONNECTION
+# -------------------------------------------------------
+
+def snmp_test(ip, community, port):
 
     value = snmp_get(
 
@@ -87,12 +99,13 @@ def snmp_test(ip, community):
 
         community,
 
+        port,
+
         "1.3.6.1.2.1.1.5.0"
 
     )
 
     if value is None:
-
         return False
 
     return True
