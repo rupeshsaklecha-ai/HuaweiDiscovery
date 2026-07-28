@@ -1,9 +1,12 @@
 from discover import discover
 
-print("="*60)
-print("Huawei Discovery Tool V1")
-print("="*60)
+print("=" * 60)
+print("Huawei Discovery Tool V2")
+print("=" * 60)
 
-discover()
+ip = input("Switch IP Address : ").strip()
+community = input("SNMP Community   : ").strip()
 
-input("\nPress Enter to Exit...")
+discover(ip, community)
+
+input("\nPress ENTER to Exit...")
