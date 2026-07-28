@@ -31,3 +31,28 @@ def discover():
                 idx=oid.split(".")[-1]
 
                 print(value," ifIndex =",idx)
+
+def get_ent_mapping(sw):
+
+    rows = snmp_walk(
+        sw["ip"],
+        sw["community"],
+        ENT_ALIAS
+    )
+
+    mapping = {}
+
+    for oid, value in rows:
+
+        # Example value:
+        # IF-MIB::ifIndex.30
+
+        if "ifIndex." in value:
+
+            ifindex = int(value.split(".")[-1])
+
+            ent = int(oid.split(".")[-1])
+
+            mapping[ifindex] = ent
+
+    return mapping
