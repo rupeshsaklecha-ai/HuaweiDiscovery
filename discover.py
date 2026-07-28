@@ -3,9 +3,9 @@ from export_excel import export_excel
 from oids import IFNAME, ENT_ALIAS
 
 
-def get_ent_mapping(ip, community):
+def get_ent_mapping(ip, community, port):
 
-    rows = snmp_walk(ip, community, ENT_ALIAS)
+    rows = snmp_walk(ip, community,port, ENT_ALIAS)
 
     mapping = {}
 
@@ -25,16 +25,16 @@ def get_ent_mapping(ip, community):
     return mapping
 
 
-def discover(ip, community):
+def discover(ip, community, port):
 
-    ports = snmp_walk(ip, community, IFNAME)
+    ports = snmp_walk(ip, community,port, IFNAME)
 
     if len(ports) == 0:
 
         print("SNMP Failed")
         return
 
-    mapping = get_ent_mapping(ip, community)
+    mapping = get_ent_mapping(ip, community,port,)
 
     print()
     print("=" * 70)
