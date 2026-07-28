@@ -11,25 +11,35 @@ def get_ent_mapping(sw):
         ENT_ALIAS
     )
 
-    print("\nENT_ALIAS WALK")
-    print("-" * 60)
+    mapping = {}
 
     for oid, value in rows:
-        print("OID  :", oid)
-        print("VALUE:", value)
-        print()
 
-    return {}
+        try:
+            # VALUE Example:
+            # 1.3.6.1.2.1.2.2.1.1.30
+            ifindex = int(value.split(".")[-1])
+
+            # OID Example:
+            # 1.3.6.1.2.1.47.1.3.2.1.2.67469454.1
+            entPhysicalIndex = int(oid.split(".")[-2])
+
+            mapping[ifindex] = entPhysicalIndex
+
+        except:
+            pass
+
+    return mapping
 
 
 def discover():
 
     for sw in SWITCHES:
 
-        print("=" * 60)
+        print("=" * 70)
         print("Switch :", sw["name"])
         print("IP     :", sw["ip"])
-        print("=" * 60)
+        print("=" * 70)
 
         ports = snmp_walk(
             sw["ip"],
@@ -44,15 +54,17 @@ def discover():
         print("SNMP Connected")
         print()
 
-        get_ent_mapping(sw)
+        mapping = get_ent_mapping(sw)
 
-        print("\nPorts")
-        print("-" * 40)
+        print("Port                           ifIndex   entPhysicalIndex")
+        print("-" * 70)
 
         for oid, value in ports:
 
             if "XGigabitEthernet" in value:
 
-                idx = oid.split(".")[-1]
+                ifindex = int(oid.split(".")[-1])
 
-                print(f"{value:30} ifIndex={idx}")
+                ent = mapping.get(ifindex, "Not Found")
+
+                print(f"{value:30} {ifindex:<9} {ent}")
