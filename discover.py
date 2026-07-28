@@ -1,4 +1,4 @@
-from snmp import snmp_walk
+from snmp import snmp_walk, snmp_get
 from export_excel import export_excel
 from oids import IFNAME, ENT_ALIAS
 from oids import HW_MODEL, HW_SERIAL, HW_SOFTWARE, HW_HARDWARE
