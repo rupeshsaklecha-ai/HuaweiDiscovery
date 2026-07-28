@@ -13,9 +13,11 @@ def snmp_get(ip, community, oid):
     errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
 
     if errorIndication:
+        print(errorIndication)
         return None
 
     if errorStatus:
+        print(errorStatus.prettyPrint())
         return None
 
     for name, value in varBinds:
@@ -26,7 +28,7 @@ def snmp_get(ip, community, oid):
 
 def snmp_walk(ip, community, oid):
 
-    data=[]
+    result=[]
 
     iterator = nextCmd(
         SnmpEngine(),
@@ -40,13 +42,14 @@ def snmp_walk(ip, community, oid):
     for errorIndication,errorStatus,errorIndex,varBinds in iterator:
 
         if errorIndication:
+            print(errorIndication)
             break
 
         if errorStatus:
+            print(errorStatus.prettyPrint())
             break
 
         for name,value in varBinds:
+            result.append((str(name),str(value)))
 
-            data.append((str(name),str(value)))
-
-    return data
+    return result
