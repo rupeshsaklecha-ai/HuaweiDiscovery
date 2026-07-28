@@ -1,7 +1,8 @@
 from discover import discover
 
-print("Huawei Discovery V1")
-print("--------------------")
+print("="*60)
+print("Huawei Discovery Tool V1")
+print("="*60)
 
 discover()
 
